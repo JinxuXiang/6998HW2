@@ -1,0 +1,237 @@
+<html>
+
+<style type="text/css">
+
+#search{
+    width: 60%; 
+    margin: auto; 
+    display: block; 
+    text-align: center; 
+    margin-top: 50px;
+}
+
+#show_record{
+    width: 60%; 
+    margin: auto; 
+    display: block; 
+    text-align: center; 
+    margin-top: 50px;
+}
+
+
+#show{
+    width: 60%; 
+    margin: auto; 
+    display: block; 
+    text-align: center; 
+    margin-top: 50px;
+}
+
+#searchin{
+    float: left;
+    width: 85%; 
+    height: 30px;
+}
+
+#label{
+    float: left;
+    width: 85%; 
+    height: 30px;
+}
+
+#btngo{
+    float: left;
+    width: 15%; 
+    height: 30px;
+    background-color: #333;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+#list{
+     padding: 0;
+     list-style-type: none;
+     display: none; 
+     position: absolute; 
+     z-index: 9999; 
+     width: 80%; 
+     margin-top: 30px;
+     max-height: 120px;
+     overflow: hidden;
+     overflow-y: scroll;
+}
+
+#list > li{
+     text-align: left;
+     padding: 5px;
+     display: none;
+}
+
+#list > li:hover{
+      background-color: #eee;
+}
+</style>
+
+<head>
+    <title>Photo Album</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!------ Include the above in your HEAD tag ---------->
+    <style type="text/css">
+        /* Container */
+        .container{
+        margin: 0 auto;
+        border: 0px solid black;
+        width: 600px;
+        height: 100px;
+        border-radius: 3px;
+        background-color: ghostwhite;
+        text-align: left;
+        }
+
+        /* Preview */
+        .preview{
+        width: 100px;
+        height: 80px;
+        border: 1px solid black;
+        margin: 0 auto;
+        background: white;
+        }
+
+        .preview img{
+        display: none;
+        }
+        /* Button */
+        .button{
+        border: 0px;
+        background-color: deepskyblue;
+        color: white;
+        padding: 5px 15px;
+        margin-left: 10px;
+        }
+        #record {
+            background-color: red; /* Green */
+            border-width: medium;
+            border-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            max-width: 50%;
+            max-height: 15%;
+            border-radius: 50%;
+            left: 100px;
+            right: 100px;
+            position: relative;
+        }
+        #stopRecord {
+            background-color: green; /* Green */
+            border-width: medium;
+            border-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            max-width: 50%;
+            max-height: 15%;
+            border-radius: 50%;
+            left: 100px;
+            right: 100px;
+            position: relative;
+        }
+        #audioSearch {
+            background-color: purple; /* Green */
+            border-width: medium;
+            border-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            max-width: 50%;
+            max-height: 15%;
+            border-radius: 50%;
+            left: 100px;
+            right: 100px;
+            position: relative;
+        }
+        #recordedAudio {
+            left: 100px;
+            right: 100px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form method="post" action="" enctype="multipart/form-data" id="myform">
+            <div >
+                <input type="file" id="file" name="file"/>
+                <input type="button" class="button" value="Upload" id="but_upload">
+                <input type="text" id="label" placeholder="Custom labels..."/> 
+            </div>
+        </form>
+    </div>
+
+
+    <div id="search"> 
+        <div id="container1"> 
+            <input type="text" id="searchin" placeholder="Search..."/> 
+            <button id="btngo" class="btn btn-primary" type="button">Search</button> 
+        </div>
+        <div>
+            <p>
+                <button id=record>Voice search</button>
+                <button id=stopRecord disabled>Stop</button>
+                <button id=audioSearch disabled>Search</button>
+            </p>
+            <p>
+                <audio id=recordedAudio></audio>
+        
+            </p>
+        </div>
+    </div>
+    <div id="show_record">  </div>
+    <div id="show">  </div>
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="js/aws-sdk-2.863.0.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/recorder.mp3.min.js"></script>
+<script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+<script type="text/javascript" src="lib/url-template/url-template.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+<script type="text/javascript" src="js/apigClient.js"></script>
+
+
+<script type ="module" src="js/main.js"></script>
+
+</html>
