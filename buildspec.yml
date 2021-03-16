@@ -1,0 +1,11 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - cd backend
+      - aws cloudformation package --template-file samTemplate.yaml --s3-bucket hw3-cloudformation-template-example  --output-template-file outputsamtemplate.yaml
+artifacts:
+  base-directory: backend
+  files:
+    - samTemplate.yaml
+    - outputsamtemplate.yaml
