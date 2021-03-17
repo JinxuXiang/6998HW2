@@ -2,14 +2,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: AI Photo Album Lambda CD
 Resources:
-  Hw2ApiGateway:
+  Api1:
     Type: 'AWS::Serverless::Api'
     Properties:
       StageName: Prod
       OpenApiVersion: "3.0"
       DefinitionUri: AI Photo Search-v1-oas30.yaml
       
-  Hw2PhotoBucket:
+  Bucket1:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
     Properties:
@@ -26,72 +26,62 @@ Resources:
             ExposedHeaders:
               - 'Etag'
 
-
-
-  Hw2SearchPhotos:
+  6998HW2LF1:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: 6998HW2_LF2_example
-      Handler: lambda_function.lambda_handler
-      Runtime: python3.8
-      CodeUri: ./lambda/6998HW2_LF2.py
-      Description: 'Lambda function for Searching Photos'
-      MemorySize: 128
-      Timeout: 30
-      Role: 'arn:aws:iam::207598852675:role/service-role/6998HW2_LF2-role-yfqnis4x'
-      Policies:
-        - AmazonS3FullAccess
-        - AmazonTranscribeFullAccess
-        - AmazonRekognitionFullAccess
-        - AmazonLexFullAccess
-        - AWSLambdaBasicExecutionRole-0454e01c-9d97-4fb5-9135-83a3985832c7
-        - AWSQuickSightElasticsearchPolicy
-        - AWSLambda_FullAccess
-      Events:
-        HttpGet:
-          Type: Api
-          Properties:
-            Path: /search
-            Method: get
-            RestApiId:
-              Ref: Hw2ApiGateway
-      Environment:
-        Variables:
-          REGION: us-east-1
-
-  Hw3IndexPhotos:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: 6998HW2_LF1_example
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
       CodeUri: ./lambda/6998HW2_LF1.py
-      Description: 'Lambda function for Indexing Photos'
+      Description: ''
       MemorySize: 128
-      Timeout: 30
+      Timeout: 3
       Role: 'arn:aws:iam::207598852675:role/service-role/6998HW2_LF1-role-vwcil9ea'
-      Policies:
-        - AmazonS3FullAccess
-        - AmazonTranscribeFullAccess
-        - AmazonRekognitionFullAccess
-        - AmazonLexFullAccess
-        - AWSLambdaBasicExecutionRole-0454e01c-9d97-4fb5-9135-83a3985832c7
-        - AWSQuickSightElasticsearchPolicy
-        - AWSLambda_FullAccess
       Events:
-        UploadS3:
+        BucketEvent1:
           Type: S3
           Properties:
             Bucket:
-              Ref: Hw2PhotoBucket
-            Events: 's3:ObjectCreated:Put'
-      Environment:
-        Variables:
-          REGION: us-east-1
+              Ref: Bucket1
+            Events:
+              - 's3:ObjectCreated:Put'
+        Api1:
+          Type: Api
+          Properties:
+            Path: /upload
+            Method: PUT
+      Layers:
+        - >-
+          arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-requests:15
+        - >-
+          arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-aws-requests-auth:7
+    
+  6998HW2LF2:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambda/6998HW2_LF1.py
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Role: 'arn:aws:iam::207598852675:role/service-role/6998HW2_LF2-role-yfqnis4x'
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /search
+            Method: GET
+      Layers:
+        - >-
+          arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-requests:15
+        - >-
+          arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-aws-requests-auth:7
+  
+  
 
 
 Outputs:
   BucketName:
     Value:
-      Ref: Hw2PhotoBucket
-    Description: Hw3 photo bucket
+      Ref: Bucket1
+    Description: Hw2 photo bucket
