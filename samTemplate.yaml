@@ -77,11 +77,3 @@ Resources:
         - >-
           arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-aws-requests-auth:7
   
-  
-
-
-Outputs:
-  BucketName:
-    Value:
-      Ref: Bucket1
-    Description: Hw2 photo bucket
