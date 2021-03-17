@@ -4,7 +4,7 @@ phases:
     commands:
       - aws cloudformation package --template-file samTemplate.yaml --s3-bucket 6998hw2pipeline --output-template-file outputsamtemplate.yaml
 artifacts:
-  base-directory: backend
+  type: zip
   files:
     - samTemplate.yaml
     - outputsamtemplate.yaml
