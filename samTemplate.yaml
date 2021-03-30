@@ -5,7 +5,7 @@ Resources:
   Api1:
     Type: 'AWS::Serverless::Api'
     Properties:
-      StageName: Prod
+      StageName: v1
       OpenApiVersion: "3.0"
       DefinitionUri: AI Photo Search-v1-oas30.yaml
       
@@ -44,11 +44,6 @@ Resources:
               Ref: Bucket1
             Events:
               - 's3:ObjectCreated:Put'
-        Api1:
-          Type: Api
-          Properties:
-            Path: /upload
-            Method: PUT
       Layers:
         - >-
           arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-requests:15
