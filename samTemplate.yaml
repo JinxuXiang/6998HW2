@@ -13,7 +13,7 @@ Resources:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
     Properties:
-      BucketName: 6998hw2photo
+      BucketName: 6998hw2photoDemo
       AccessControl: PublicRead
       CorsConfiguration:
         CorsRules:
