@@ -8,12 +8,6 @@ Resources:
     Properties:
       BucketName: 6998hw2photoDemo
       AccessControl: PublicRead
-      CorsConfiguration:
-        CorsRules:
-          AllowedHeaders: '*'
-          AllowedMethods: 'GET,PUT,POST'
-          AllowedOrigins: '*'
-          ExposedHeaders: 'Etag'
               
   6998HW2LF1:
     Type: 'AWS::Serverless::Function'
