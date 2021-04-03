@@ -1,0 +1,173 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AI Photo Album Lambda CD",
+    "Resources": {
+        "6998HW2LF1BucketEvent1Permission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "SourceAccount": {
+                    "Ref": "AWS::AccountId"
+                },
+                "FunctionName": {
+                    "Ref": "6998HW2LF1"
+                },
+                "Principal": "s3.amazonaws.com"
+            }
+        },
+        "ElasticSearchhw2": {
+            "Type": "AWS::Elasticsearch::Domain",
+            "Properties": {
+                "ElasticsearchClusterConfig": {
+                    "InstanceType": "m3.medium.elasticsearch"
+                },
+                "DomainName": "elasticsearch-test"
+            }
+        },
+        "6998HW2LF1": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Layers": [
+                    "arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-requests:15",
+                    "arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-aws-requests-auth:7"
+                ],
+                "Code": {
+                    "S3Bucket": "6998hw2pipeline",
+                    "S3Key": "637494eb04faf40b20d366668437ca2d"
+                },
+                "Description": "",
+                "Tags": [
+                    {
+                        "Value": "SAM",
+                        "Key": "lambda:createdBy"
+                    }
+                ],
+                "MemorySize": 128,
+                "Handler": "lambda_function.lambda_handler",
+                "Role": "arn:aws:iam::207598852675:role/service-role/6998HW2_LF1-role-vwcil9ea",
+                "Timeout": 3,
+                "Runtime": "python3.8"
+            }
+        },
+        "6998HW2LF2": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Layers": [
+                    "arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-requests:15",
+                    "arn:aws:lambda:us-east-1:770693421928:layer:Klayers-python38-aws-requests-auth:7"
+                ],
+                "Code": {
+                    "S3Bucket": "6998hw2pipeline",
+                    "S3Key": "637494eb04faf40b20d366668437ca2d"
+                },
+                "Description": "",
+                "Tags": [
+                    {
+                        "Value": "SAM",
+                        "Key": "lambda:createdBy"
+                    }
+                ],
+                "MemorySize": 128,
+                "Handler": "lambda_function.lambda_handler",
+                "Role": "arn:aws:iam::207598852675:role/service-role/6998HW2_LF2-role-yfqnis4x",
+                "Timeout": 3,
+                "Runtime": "python3.8"
+            }
+        },
+        "Bucket1": {
+            "DeletionPolicy": "Retain",
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "AccessControl": "PublicRead",
+                "NotificationConfiguration": {
+                    "LambdaConfigurations": [
+                        {
+                            "Function": {
+                                "Fn::GetAtt": [
+                                    "6998HW2LF1",
+                                    "Arn"
+                                ]
+                            },
+                            "Event": "s3:ObjectCreated:Put"
+                        }
+                    ]
+                },
+                "BucketName": "6998hw2photodemo"
+            },
+            "DependsOn": [
+                "6998HW2LF1BucketEvent1Permission"
+            ]
+        },
+        "ServerlessRestApiDeploymentb310236e1c": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ServerlessRestApi"
+                },
+                "Description": "RestApi deployment id: b310236e1c005fe9437ed83210eb50e7016a6d27",
+                "StageName": "Stage"
+            }
+        },
+        "6998HW2LF2Api1PermissionProd": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "FunctionName": {
+                    "Ref": "6998HW2LF2"
+                },
+                "SourceArn": {
+                    "Fn::Sub": [
+                        "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/GET/search",
+                        {
+                            "__Stage__": "*",
+                            "__ApiId__": {
+                                "Ref": "ServerlessRestApi"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "ServerlessRestApiProdStage": {
+            "Type": "AWS::ApiGateway::Stage",
+            "Properties": {
+                "DeploymentId": {
+                    "Ref": "ServerlessRestApiDeploymentb310236e1c"
+                },
+                "RestApiId": {
+                    "Ref": "ServerlessRestApi"
+                },
+                "StageName": "Prod"
+            }
+        },
+        "ServerlessRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+                "Body": {
+                    "info": {
+                        "version": "1.0",
+                        "title": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    "paths": {
+                        "/search": {
+                            "get": {
+                                "x-amazon-apigateway-integration": {
+                                    "httpMethod": "POST",
+                                    "type": "aws_proxy",
+                                    "uri": {
+                                        "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${6998HW2LF2.Arn}/invocations"
+                                    }
+                                },
+                                "responses": {}
+                            }
+                        }
+                    },
+                    "swagger": "2.0"
+                }
+            }
+        }
+    }
+}
