@@ -6,7 +6,7 @@ Resources:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
     Properties:
-      BucketName: 6998hw2photoDemo
+      BucketName: 6998hw2photodemo
       AccessControl: PublicRead
               
   6998HW2LF1:
