@@ -2,7 +2,19 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: AI Photo Album Lambda CD
 Resources:
-
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: 6998hw2photoDemo
+      AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          AllowedHeaders: '*'
+          AllowedMethods: 'GET,PUT,POST'
+          AllowedOrigins: '*'
+          ExposedHeaders: 'Etag'
+              
   6998HW2LF1:
     Type: 'AWS::Serverless::Function'
     Properties:
