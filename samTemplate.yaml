@@ -2,13 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: AI Photo Album Lambda CD
 Resources:
-  Api1:
-    Type: 'AWS::Serverless::Api'
-    Properties:
-      StageName: v1
-      OpenApiVersion: "3.0"
-      DefinitionUri: AI Photo Search-v1-oas30.yaml
-      
+
   Bucket1:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
